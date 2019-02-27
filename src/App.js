@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import TextInput from './components/text_input';
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
             Learn React
           </a>
         </header>
+        <TextInput labelText="Hot Dog" value="fish" />
       </div>
     );
   }
