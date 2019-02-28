@@ -21,6 +21,32 @@ footer {
   justify-content: center;
   margin: auto;
 }
+
+.control-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.control-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+  padding: 1rem;
+  border-radius: 50%;
+  font-size: 1.8rem;
+}
+
+.control-button h6, .control-button i {
+  padding: 0;
+  margin: 0;
+}
+
+.control-button:hover {
+  cursor: pointer;
+}
+
 .speaker-box label {
   margin: 0.2rem;
   margin-right: 1rem;
