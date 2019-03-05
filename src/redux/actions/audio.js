@@ -2,6 +2,7 @@ export const PLAY = 'PLAY';
 export const PAUSE = 'PAUSE';
 export const JUMP_BACK = 'JUMP_BACK';
 export const START_OVER = 'START_OVER';
+export const SET_POSITION = 'SET_POSITION';
 export const UPDATE_TEXT = 'UPDATE_TEXT';
 
 export const play = () => dispatch => {
@@ -20,6 +21,13 @@ export const jumpBack = (seconds) => dispatch => {
   dispatch({
     type: JUMP_BACK,
     seconds
+  });
+};
+
+export const setPosition = (position) => dispatch => {
+  dispatch({
+    type: SET_POSITION,
+    position
   });
 };
 

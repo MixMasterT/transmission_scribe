@@ -32,15 +32,20 @@ class App extends Component {
           </div>
           <div id="main-column">
             <Title name="North Fire Dispatch N F" />
-            {this.props.textArray.map((t, idx) => (
-              <SpeakerBox
-                updateParent={this.updateTextArray(idx)}
-                key={idx}
-                labelText="21051:5"
-                value={this.props.textArray[idx]}
-                placeHolder={"some text..." + idx}
-              />
-            ))}
+            {this.props.textArray.map((t, idx) => {
+              const listItem = this.props.srcList[idx];
+              const pos = parseFloat(listItem.pos);
+              return (
+                <SpeakerBox
+                  updateParent={this.updateTextArray(idx)}
+                  key={idx}
+                  labelText={`${listItem.src}:${pos.toFixed()}`}
+                  value={this.props.textArray[idx]}
+                  placeHolder={"some text..." + idx}
+                />
+              )
+            }
+          )}
           </div>
         </main>
         <footer><AudioControl /></footer>
@@ -51,6 +56,7 @@ class App extends Component {
 
 const mapStateToProps = state => ({
   textArray: state.data.textArray,
+  srcList: state.data.srcList,
   errors: state.errors,
 });
 

@@ -1,9 +1,13 @@
 import React from 'react';
 
-export default ({currentPosition, markedPositions}) => {
+export default ({ markers, position }) => {
+  console.log('markers: ', markers);
   return (
-    <audio controls className="player">
-      <source src="http://www.nihilus.net/soundtracks/Static%20Memories.mp3" />
-    </audio>
+    <div id="play-bar">
+      <div id="progress" style={{ width: `${position}%` }}></div>
+      { markers.map(p => (
+        <div key={p} className="mark" style={{ left: `${p}%`}}></div>
+      ))}
+    </div>
   )
 }

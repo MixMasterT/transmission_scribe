@@ -1,12 +1,16 @@
 /*
   Audio Reducer
 */
-import { PLAY, PAUSE, JUMP_BACK, START_OVER } from '../actions/audio';
+import {
+  PLAY,
+  PAUSE,
+  JUMP_BACK,
+  START_OVER,
+} from '../actions/audio';
 
 const defaultState = {
   audioFile: '',
   isPlaying: false,
-  position: 0,
 };
 
 export default (state = defaultState, action) => {
