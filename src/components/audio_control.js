@@ -22,11 +22,11 @@ class AudioControl extends Component {
     this.pause = this.pause.bind(this);
   }
   componentDidMount() {
-    this.audio.current.addEventListener('timeupdate', () => {
-      this.setState({
-        audioPos: this.audio.current.currentTime,
-      });
-    });
+    // this.audio.current.addEventListener('timeupdate', () => {
+    //   this.setState({
+    //     audioPos: this.audio.current.currentTime,
+    //   });
+    // });
     this.audio.current.addEventListener('loadedmetadata', () => {
       this.pause();
       this.setState({
@@ -41,6 +41,9 @@ class AudioControl extends Component {
   }
   pause() {
     this.audio.current.pause();
+    this.setState({
+      audioPos: this.audio.current.currentTime,
+    });
     this.props.pause();
   }
   render() {
@@ -60,7 +63,9 @@ class AudioControl extends Component {
           <source src="http://www.nihilus.net/soundtracks/Static%20Memories.mp3" />
         </audio>
         <PlayBar
+          isPlaying={this.props.isPlaying}
           markers={marks}
+          duration={this.state.audioLength}
           position={100 * (this.state.audioPos / this.state.audioLength)}
         />
         <div className="control-buttons">
