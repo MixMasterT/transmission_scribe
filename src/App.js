@@ -7,11 +7,15 @@ import Title from './components/title';
 import SpeakerBox from './components/speaker_box';
 import AudioControl from './components/audio_control';
 import AudioDataBox from './components/audio_data_box';
-import { updateText } from './redux/actions/audio';
+import { updateText, setPosition, play } from './redux/actions/audio';
+import { fetchData } from './redux/actions/api';
 
 class App extends Component {
   constructor(props) {
     super(props)
+  }
+  componentDidMount() {
+    this.props.fetchData();
   }
   componentDidUpdate(prevProps, prevState) {
     // use this hook to reset textArray in state if a new wav file has been loaded
@@ -21,6 +25,13 @@ class App extends Component {
       const newArray = this.props.textArray.slice();
       newArray[idx] = value;
       this.props.updateText(idx, value);
+    }
+  }
+  handlePlayButtonClick(pos) {
+    return () => {
+      console.log('gonna set play Postiion to: ', pos);
+      this.props.setPosition(pos);
+      this.props.play();
     }
   }
   render() {
@@ -39,6 +50,7 @@ class App extends Component {
                 <SpeakerBox
                   updateParent={this.updateTextArray(idx)}
                   key={idx}
+                  handlePlayButtonClick={this.handlePlayButtonClick(listItem.pos)}
                   labelText={`${listItem.src}:${pos.toFixed()}`}
                   value={this.props.textArray[idx]}
                   placeHolder={"some text..." + idx}
@@ -62,6 +74,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateText: (idx, text) => dispatch(updateText(idx, text)),
+  fetchData: () => dispatch(fetchData()),
+  setPosition: (pos) => dispatch(setPosition(pos)),
+  play: () => dispatch(play()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

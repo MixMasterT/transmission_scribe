@@ -23,6 +23,27 @@ export const postResult = () => async (dispatch, getState) => {
     type: CONFIRM_POST_SUCCESS,
   });
 };
+
+export const fetchData = () => async (dispatch, getState) => {
+  let fetchResponse, data;
+  try {
+    fetchResponse = await api.getAudioData();
+  } catch(err) {
+    console.log('fetchData error: ', err);
+    const fetchError = await (await fetchResponse).text();
+    const error = `Error fetching data: ${fetchError}`
+    return dispatch(receiveApiError(error));
+  }
+  if(fetchResponse.ok) {
+    const responseData = await fetchResponse.json();
+    console.log('fetchResponse succeeded! ', await responseData);
+    data = responseData.data;
+  }
+  dispatch({
+    type: RECEIVE_AUDIO_DATA,
+    data
+  });
+};
 export const receiveAudioData = (data) => dispatch => {
   dispatch({
     type: RECEIVE_AUDIO_DATA,

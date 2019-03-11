@@ -1,14 +1,15 @@
 import React from 'react';
 
-export default ({ markers, position, isPlaying, duration }) => {
-  console.log('isPlaying: ', isPlaying);
+export default ({ markers, position, isPlaying, duration, isJump }) => {
   return (
     <div id="play-bar">
       <div id="progress"
         className={isPlaying ? 'is-playing' : 'static'}
         style={{
-          width: `${isPlaying ? '100' : position}%`,
-          transition: `${duration - position}s linear`,
+          width: `${isPlaying ? 100 : 100 * position / duration}%`,
+          transition: `${
+            isPlaying && !isJump ? duration - position : 0
+          }s linear`
         }}
       />
       { markers.map(p => (

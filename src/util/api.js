@@ -2,9 +2,9 @@
   apiCalls
 */
 
-export const root = 'https://root-url-goes-here.com';
+export const root = 'http://localhost:5000/';
 export const postPath = '/relative/path/for/post'; // post transcription data
-export const getPath = '/relative/path/for/get'; // fetch audio data
+export const getPath = 'api/v1/content'; // fetch audio data
 // export const root = 'http://localhost:8080/api/';
 
 const getConfig = (method, requestBody) => {

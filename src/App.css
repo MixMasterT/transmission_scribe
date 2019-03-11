@@ -115,3 +115,7 @@
   height: 0.8rem;
   position: relative;
 }
+
+#play-bar .progress {
+  transition-property: width;
+}

@@ -1,5 +1,4 @@
 from flask_restplus import Resource
-
 from . import api
 
 
@@ -169,22 +168,93 @@ class Content(Resource):
                   "pos": 96.444
                 }
               ]
-            }
+            },
+            {
+                "start_time": 1550799999,
+                "stop_time": 1550719999,
+                "emergency": 0,
+                "talkgroup": 7200,
+                "audioSrc": "/audio/test.wav",
+                "talkgroup_name": "Light Sabre Posse",
+                "srcList": [
+                  {
+                    "src": 9999,
+                    "time": 1550798326,
+                    "pos": 0
+                  },
+                ]
+            },
+            {
+                "start_time": 1550799999,
+                "stop_time": 1550719999,
+                "emergency": 0,
+                "talkgroup": 7200,
+                "audioSrc": "/audio/test1.wav",
+                "talkgroup_name": "Death Star",
+                "srcList": [
+                  {
+                    "src": 8888,
+                    "time": 1550798326,
+                    "pos": 0
+                  },
+                  {
+                    "src": 9999,
+                    "time": 1550798326,
+                    "pos": 5
+                  },
+                  {
+                    "src": 7777,
+                    "time": 1550798326,
+                    "pos": 8
+                  },
+                  {
+                    "src": 3333,
+                    "time": 1550798326,
+                    "pos": 11.5
+                  },
+                  {
+                    "src": 5555,
+                    "time": 1550798326,
+                    "pos": 17.1
+                  },
+                ]
+            },
+            {
+                "start_time": 1550799999,
+                "stop_time": 1550719999,
+                "emergency": 0,
+                "talkgroup": 7200,
+                "audioSrc": "/audio/test2.wav",
+                "talkgroup_name": "Chewbacka and Crew",
+                "srcList": [
+                  {
+                    "src": 1111,
+                    "time": 1550798326,
+                    "pos": 0
+                  },
+                  {
+                    "src": 2222,
+                    "time": 1550798326,
+                    "pos": 6
+                  },
+                  {
+                    "src": 3333,
+                    "time": 1550798326,
+                    "pos": 9
+                  },
+                  {
+                    "src": 4444,
+                    "time": 1550798326,
+                    "pos": 14
+                  },
+                ]
+            },
         ]
-        data = {
-            'auth': {
-                'tenantName': 'user1',
-                'passwordCredentials': {
-                    'username': 'user1',
-                    'password': 'pass'
-                }
-            }
-        }
         sample_int = random.randint(1,2)
         return {
             "test-cont": "Yes...it's working!",
             "int": "{}".format(sample_int),
-            "data": fake_data[0]
+            "data": fake_data[sample_int]
         }, 200
 
 api.add_resource(Content, '/content')

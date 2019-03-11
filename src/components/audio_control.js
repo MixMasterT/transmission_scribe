@@ -6,7 +6,8 @@ import {
   play,
   pause,
   jumpBack,
-  startOver
+  startOver,
+  setPosition,
 } from '../redux/actions/audio';
 import { postResult } from '../redux/actions/api';
 
@@ -15,43 +16,81 @@ class AudioControl extends Component {
     super(props)
     this.state = {
       audioLength: 0,
-      audioPos: 0,
+      playPosition: 0,
+      animationFrameListener: null,
+      isPlaying: false,
     }
     this.audio = React.createRef();
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
+    this.resetAudio = this.resetAudio.bind(this);
   }
   componentDidMount() {
+    const animationFrameListener = window.requestAnimationFrame((timestamp) => {
+      if(timestamp % 1000 === 0) {
+        console.log('timed a second, ', timestamp);
+      }
+    });
+    this.setState({ animationFrameListener });
     // this.audio.current.addEventListener('timeupdate', () => {
     //   this.setState({
-    //     audioPos: this.audio.current.currentTime,
+    //     playPosition: this.audio.current.currentTime,
     //   });
     // });
+    this.resetAudio();
+  }
+  static getDerivedStateFromProps(nextProps, prevState){
+     if(
+       nextProps.playPosition !== prevState.playPosition ||
+       nextProps.isPlaying !== prevState.isPlaying
+     ) {
+       return {
+         playPosition: nextProps.playPosition,
+         isPlaying: nextProps.isPlaying
+       };
+    }
+    else return null;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.playPosition !== prevProps.playPosition) {
+      this.audio.current.currentTime = this.props.playPosition;
+    }
+    if(this.props.isPlaying && !prevProps.isPlaying) {
+      this.audio.current.play();
+    }
+  }
+  resetAudio() {
     this.audio.current.addEventListener('loadedmetadata', () => {
       this.pause();
       this.setState({
         audioLength: this.audio.current.duration,
-        audioPos: 0,
+        playPosition: 0,
       });
-    })
+    });
   }
   play() {
     this.audio.current.play();
+    this.setState({ isPlaying: true });
     this.props.play();
   }
   pause() {
     this.audio.current.pause();
+    const pos = this.audio.current.currentTime;
     this.setState({
-      audioPos: this.audio.current.currentTime,
+      playPosition: pos,
+      isPlaying: false,
     });
     this.props.pause();
+    this.props.setPosition(pos);
+  }
+  componentWillUnmount() {
+    window.cancelAnimationFrame(this.state.animationFrameListener);
   }
   render() {
     let marks = [];
     if(this.state.audioLength) {
       marks = this.props.markers.map(m => 100 * m / this.state.audioLength)
     }
-    console.log('markers in audio-control: ', this.props.markers);
     return(
       <div id="audio-control">
         <audio
@@ -59,14 +98,13 @@ class AudioControl extends Component {
           className="player"
           ref={ this.audio }
           autoPlay={false}
-        >
-          <source src="http://www.nihilus.net/soundtracks/Static%20Memories.mp3" />
-        </audio>
+          src={`http://127.0.0.1:5000${this.props.audioSrc}`}
+        />
         <PlayBar
           isPlaying={this.props.isPlaying}
           markers={marks}
           duration={this.state.audioLength}
-          position={100 * (this.state.audioPos / this.state.audioLength)}
+          position={this.state.playPosition}
         />
         <div className="control-buttons">
           {
@@ -85,6 +123,8 @@ class AudioControl extends Component {
 const mapStateToProps = state => ({
   isPlaying: state.audio.isPlaying,
   markers: state.data.srcList.map(i => i.pos),
+  audioSrc: state.data.audioSrc,
+  playPosition: state.audio.playPosition,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -93,6 +133,7 @@ const mapDispatchToProps = dispatch => ({
   jumpBack: () => dispatch(jumpBack()),
   startOver: () => dispatch(startOver()),
   postResult: () => dispatch(postResult()),
+  setPosition: (pos) => dispatch(setPosition(pos)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AudioControl);
