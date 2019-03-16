@@ -59,15 +59,24 @@
   cursor: pointer;
 }
 
+.speaker-box {
+  margin-bottom: 0.5rem;
+  height: 1.8rem;
+}
+
 .speaker-box label {
+  height: 100%;
+  padding: 1rem;
   margin: 0.2rem;
   margin-right: 1rem;
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 .speaker-box input {
+  padding: 0.5rem;
   width: 80%;
 }
 .speaker-box h5 {

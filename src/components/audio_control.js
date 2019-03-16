@@ -19,6 +19,7 @@ class AudioControl extends Component {
       playPosition: 0,
       animationFrameListener: null,
       isPlaying: false,
+      isJump: false,
     }
     this.audio = React.createRef();
     this.play = this.play.bind(this);
@@ -40,9 +41,8 @@ class AudioControl extends Component {
     this.resetAudio();
   }
   static getDerivedStateFromProps(nextProps, prevState){
-     if(
-       nextProps.playPosition !== prevState.playPosition ||
-       nextProps.isPlaying !== prevState.isPlaying
+     if(nextProps.playPosition !== prevState.playPosition
+       || nextProps.isPlaying !== prevState.isPlaying
      ) {
        return {
          playPosition: nextProps.playPosition,
@@ -54,6 +54,13 @@ class AudioControl extends Component {
   componentDidUpdate(prevProps, prevState) {
     if(this.props.playPosition !== prevProps.playPosition) {
       this.audio.current.currentTime = this.props.playPosition;
+      this.setState({
+        isJump: true
+      }, () => {
+        setTimeout(() => {
+          this.setState({ isJump: false });
+        }, 100);
+      })
     }
     if(this.props.isPlaying && !prevProps.isPlaying) {
       this.audio.current.play();
@@ -105,6 +112,7 @@ class AudioControl extends Component {
           markers={marks}
           duration={this.state.audioLength}
           position={this.state.playPosition}
+          isJump={this.state.isJump}
         />
         <div className="control-buttons">
           {
