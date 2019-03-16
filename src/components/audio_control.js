@@ -33,23 +33,24 @@ class AudioControl extends Component {
       }
     });
     this.setState({ animationFrameListener });
-    // this.audio.current.addEventListener('timeupdate', () => {
-    //   this.setState({
-    //     playPosition: this.audio.current.currentTime,
-    //   });
-    // });
+    this.audio.current.addEventListener('timeupdate', () => {
+      this.setState({
+        playPosition: this.audio.current.currentTime,
+      });
+    });
+    this.audio.current.addEventListener('ended', () => {
+      this.setState({
+        isPlaying: false,
+      });
+      this.props.pause();
+    });
     this.resetAudio();
   }
   static getDerivedStateFromProps(nextProps, prevState){
-     if(nextProps.playPosition !== prevState.playPosition
-       || nextProps.isPlaying !== prevState.isPlaying
-     ) {
-       return {
-         playPosition: nextProps.playPosition,
-         isPlaying: nextProps.isPlaying
-       };
-    }
-    else return null;
+    return {
+      playPosition: nextProps.playPosition,
+      isPlaying: nextProps.isPlaying
+    };
   }
   componentDidUpdate(prevProps, prevState) {
     if(this.props.playPosition !== prevProps.playPosition) {
